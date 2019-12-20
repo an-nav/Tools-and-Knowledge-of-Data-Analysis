@@ -24,8 +24,10 @@ X：obversed data
 Z：latent variable
 (X,Z)：complete data  
 $\theta$：parameter  
-EM公式：$\theta^{(t+1)}={\underset {\theta}{\operatorname {arg\,max} }}\int_Z logP(X,Z;\theta)P(Z|X;\theta^{(t)})$  
+EM公式：$\theta^{(t+1)}={\underset {\theta}{\operatorname {arg\,max} }}\int_ZP(Z|X;\theta^{(t)}) logP(X,Z;\theta)dZ$   
+
 其中：$\theta^{(t+1)}，\theta^{(t)}$为常量
+
 ### 思路1-基于KL散度  
 E-step:  
 $$
@@ -71,12 +73,16 @@ log\,P(X;\theta) &\ge ELBO\\
 \rightarrow \theta &= \mathop{argmax}_{\theta}\\
 &=\mathop{argmax}_{\theta}\int_Z q(Z)log\frac{P(X,Z;\theta)}{q(Z)}dZ\\
 &=\mathop{argmax}_{\theta}\int_Z P(Z|X;\theta^{(t)})log\frac{P(X,Z;\theta)}{P(Z|X;\theta^{(t)})}dZ\\
-&=\mathop{argmax}_{\theta}\int_Z P(Z|X;\theta^{(t)})log\,P(X,Z;\theta)
+&=\mathop{argmax}_{\theta}\int_Z P(Z|X;\theta^{(t)})log\,P(X,Z;\theta)dZ
 \end{align}
 $$
 \* $\theta^{(t)}$为常量因此变量只有$\theta$一个
-由此得到：
-$$\theta^{(t+1)}=\mathop{argmax}_{\theta}\int_Z P(Z|X;\theta^{(t)})log\,P(X,Z;\theta)$$  
+由此得到:
+$$
+\theta^{(t+1)}=\mathop{argmax}_{\theta}\int_Z P(Z|X;\theta^{(t)})log\,P(X,Z;\theta)dZ
+$$
+
+
 ### 思路2-基于Jensen不等式  
 #### Jensen不等式
 对于凹函数(如图)

@@ -7,13 +7,11 @@
 那么我们策略可以是这样的：
 
 <div align=center><img src="../Resource/entropy_strategy_1.jpg "/></div>  
-
 那么在这种情况下我们需要猜$\frac{1}{4}\times2+\frac{1}{4}\times2+\frac{1}{4}\times2+\frac{1}{4}\times2=2$次，可见在这个场景下我们最少需要两次能知道那个球是什么颜色。  
 场景2：店家告诉我们盒子内球的概率分布是橙色$\frac{1}{2}$，紫色$\frac{1}{4}$,蓝色$\frac{1}{8}$,绿色$\frac{1}{8}$  
 那么这情况下我们的策略应该是这样的：  
 
 <div align=center><img src="../Resource/entropy_strategy_2.jpg "/></div>  
-
 在这种情况下我们需要猜$\frac{1}{2}\times1+\frac{1}{4}\times2+\frac{1}{8}\times3+\frac{1}{8}\times3=1.75$次，我们至少需要1.75次才能猜对颜色，这里可以看到由于我们知道了盒子内的球的分布情况我们所需的次数减少了（虽然实际上还是得两次）。  
 场景3：店家大法善心告诉我们盒子里全是橙球：  
 这个情况下我们知道橙球的概率是1那么只要猜$1\times0=0$次  
