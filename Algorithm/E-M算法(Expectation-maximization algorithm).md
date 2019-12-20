@@ -127,3 +127,4 @@ E-step得到最大结果，M-step就同第一种推导方法了。
 1. [CSDN-如何通俗理解EM算法](https://blog.csdn.net/v_july_v/article/details/81708386)
 2. [CSDN-变分推断中的ELBO(证据下界)](https://blog.csdn.net/qy20115549/article/details/93074519)
 3. [BiliBili-机器学习-白板推导系列(十)-EM算法（Expectation Maximization）](https://www.bilibili.com/video/av31906558)
+
