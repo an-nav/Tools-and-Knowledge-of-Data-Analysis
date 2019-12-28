@@ -148,6 +148,7 @@ $$
 \begin{align}
 P(w_j|z_k)^{(t+1)}&=\frac{\sum_in(d_i,w_j)P(z_k|d_i,w_j;\theta^{(t)})}{\sum_j\sum_in(d_i,w_j)P(z_k|d_i,w_j;\theta^{(t)})}\\
 P(z_k|d_i)^{(t+1)}&=\frac{\sum_jn(d_i,w_j)P(z_k|d_i,w_j;\theta^{(t)})}{\sum_k\sum_jn(d_i,w_j)P(z_k|d_i,w_j;\theta^{(t)})}\\
+&=\frac{\sum_jn(d_i,w_j)P(z_k|d_i,w_j;\theta^{(t)})}{n(d_i)}\\
 \rightarrow \theta^{(t+1)}&=(P(w_j|z_k)^{(t+1)},P(z_k|d_i)^{(t+1)})\tag{11}
 \end{align}
 $$

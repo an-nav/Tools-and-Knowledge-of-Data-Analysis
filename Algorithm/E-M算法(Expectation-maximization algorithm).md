@@ -101,7 +101,7 @@ $$
 #### 推导  
 $$
 \begin{align}
-log\,P(X;\theta) &=log\,\int_Z P(X,Z|\theta)dZ\\
+log\,P(X;\theta) &=log\,\int_Z P(X,Z;\theta)dZ\\
 &= log\,\int_Z \frac{P(X,Z;\theta)}{q(Z)}{q(Z)}dZ\\
 &= log\,E_{q(Z)}[\frac{P(X,Z;\theta)}{q(Z)}]\\
 &\ge E_{q(Z)}[log\frac{P(X,Z;\theta)}{q(Z)}]\tag{2}\\
@@ -121,6 +121,28 @@ c&=P(X;\theta)\\
 $$
 同样基于Jensen不等式的推导思路下也会得出相同的结论即当隐变量的分布$q(Z)=P(Z|X;\theta)$即等于后验时  
 E-step得到最大结果，M-step就同第一种推导方法了。
+
+## 合理性证明
+
+要证明EM算法的合理性即证明其单调增长:$l(\theta^t) \leq l(\theta^{t+1})$
+
+证明：
+
+首先我们选定t时刻和t+1时刻的参数$\theta^t 和\theta^{t+1}$在选定$\theta^t$之后我们得到E-step结果:
+$$
+Q(\theta^t)=P(Z|X;\theta^t)
+$$
+然后进行M-step便得到:
+$$
+\begin{align}
+l(\theta^{t+1})&\geq\int_ZQ(\theta^t)logP(Z,X;\theta^{t+1})\tag{3}\\
+&\geq\int_ZQ(\theta^t))logP(Z,X;\theta^{t})\tag{4}\\
+&=l(\theta^t)\tag{5}
+\end{align}
+$$
+在式(3)中我们固定$Q(\theta^t)$然后变化$\theta$求$l(\theta^{t+1})$，这个过程中由于E-step得到的$Q(\theta^t)$是固定的所以无法求得$l(\theta^t)$的值而只能取得其下界的最大值即最大化**$Q(\theta^t)固定情况下的l(\theta^t)$**，因为变量$\theta$可以任取，所以由式子(3)得到式子(4)进而证明其单调性。
+
+
 
 
 ## 参考

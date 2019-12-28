@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="396087d7-bae9-48e8-a738-9ac1d7538f72" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Algorithm/E-M算法(Expectation-maximization algorithm).md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithm/E-M算法(Expectation-maximization algorithm).md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NLP/Model/pLSA(Probabilistic latent semantic analysis)/pLSA(Probabilistic latent semantic analysis).md" beforeDir="false" afterPath="$PROJECT_DIR$/NLP/Model/pLSA(Probabilistic latent semantic analysis)/pLSA(Probabilistic latent semantic analysis).md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,7 +25,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -112,6 +113,7 @@
       <workItem from="1575265740535" duration="4713000" />
       <workItem from="1576726865015" duration="784000" />
       <workItem from="1576727909903" duration="516000" />
+      <workItem from="1577245029563" duration="326000" />
     </task>
     <task id="LOCAL-00001" summary="增加注释">
       <created>1576728416149</created>
