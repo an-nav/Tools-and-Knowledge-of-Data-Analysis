@@ -149,20 +149,21 @@ P(\theta|x,\alpha,\beta)&=P(\theta|\alpha,\beta)\frac{P(x|\theta,n)}{\int_0^1P(x
 \end{align}
 $$
 
+两边同乘$P(x|\alpha,\beta)$有:
 $$
 \begin{align}
 P(\theta,x|\alpha,\beta)&=P(\theta|\alpha,\beta)P(x|\theta,n)\\
 &={{n}\choose{x}}\theta^x(1-\theta)^{n-x}\frac{1}{B(\alpha,\beta)}\theta^{\alpha-1}(1-\theta)^{\beta-1}\\
 &=\frac{1}{B(\alpha,\beta)}{{n}\choose{k}}\theta^{x+\alpha-1}(1-\theta)^{\beta+n-x-1}\\
-=&\frac{B(x+\alpha,\beta+n-x)}{B(\alpha,\beta)}{{n}\choose{k}}\frac{1}{B(x+\alpha,\beta+n-x)}\theta^{x+\alpha-1}(1-\theta)^{\beta+n-x-1}\\
+&=\frac{B(x+\alpha,\beta+n-x)}{B(\alpha,\beta)}{{n}\choose{k}}\frac{1}{B(x+\alpha,\beta+n-x)}\theta^{x+\alpha-1}(1-\theta)^{\beta+n-x-1}\\
 &=h(x)Beta(\theta|\alpha+x,\beta+n-x)\\
 \rightarrow h(x)&=\frac{B(x+\alpha,\beta+n-x)}{B(\alpha,\beta)}{{n}\choose{k}}
 \end{align}
 $$
-
+我们要求的是后验概率而其由如下等式$P(\theta,x|\alpha,\beta)=P(\theta|x,\alpha,\beta)P(x|\alpha,\beta)$其中$P(\theta,x|\alpha,\beta)$我们已经经过上面的推导得到了而对于$P(x|\alpha,\beta)$则有：
 $$
 \begin {align}
-\int_0^1P(x,\theta|\alpha,\beta)d\theta&=Beta(\alpha+x,\beta+n-x)\\
+P(x|\alpha,\beta)&=\int_0^1P(\theta,x|\alpha,\beta)d\theta\\
 &=\frac{B(x+\alpha,\beta+n-x)}{B(\alpha,\beta)}{{n}\choose{k}}\int_0^1B(\theta|\alpha+x,\beta+n-x)d\theta\\
 &=h(x)
 \end {align}
@@ -174,6 +175,10 @@ P(\theta|x,\alpha,\beta)&=P(\theta|\alpha,\beta)\frac{P(x|\theta,n)}{\int_0^1P(x
 P(\theta|x,\alpha,\beta)&=Beta(\theta|\alpha+x,\beta+n-x)\tag{9}
 \end{align}
 $$
+
+
+
+
 
 可见后验分布(式(9))与先验分布(式(8))都是Beta分布，所以Beta分布是二项分布的共轭先验分布。
 
