@@ -116,8 +116,8 @@ class LdaApplication:
 
 if __name__ == '__main__':
     file = './'
-    corpusFile = 'LDA_demo_data.txt'
-    stopWordsFile = 'stop_words.txt'
+    corpusFile = './data/LDA_demo_data.txt'
+    stopWordsFile = './data/stop_words.txt'
     with open(os.path.join(file, corpusFile), 'r', encoding='utf-8') as f:
         corpus = f.readlines()
 

@@ -13,6 +13,11 @@ P(x_i|\alpha_i)&=\frac{1}{B(\alpha_i)}\prod_{i=1}^{K}x_i^{\alpha_i-1}\\
 \end{align}
 $$
 
+由于概率的基本性质可得到归一化系数$B(\alpha_i)$有时候也写作$\Delta(\alpha)$为：
+$$
+B(\alpha_i)=\Delta(\alpha_i)=\int_{\vec x}\prod_{i=1}^Kx_i^{\alpha_i-1}d\vec x
+$$
+
 ## 期望
 
 $$

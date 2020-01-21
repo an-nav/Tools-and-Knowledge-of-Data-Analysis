@@ -142,8 +142,8 @@ class pLSA:
 
 
 if __name__ == '__main__':
-    data = codecs.open('./dataset.txt', encoding='utf-8')
-    stop_words = codecs.open('./stopwords.dic', encoding='utf-8')
+    data = codecs.open('./data/dataset.txt', encoding='utf-8')
+    stop_words = codecs.open('./data/stopwords.dic', encoding='utf-8')
 
     data = [x.strip() for x in data]
     stop_words = [x.strip() for x in stop_words]
