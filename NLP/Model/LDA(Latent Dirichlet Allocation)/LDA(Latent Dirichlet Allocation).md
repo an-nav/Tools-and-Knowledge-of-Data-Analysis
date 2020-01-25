@@ -96,21 +96,41 @@ $$
 
 ### Gibbs 采样条件概率
 
+#### 思路一
+
+条件概率分布$P(z_i=k|\vec{w},\vec{z_{\neg i}})$
+
+由之前求出的联合概率可得:
+$$
+\begin{align}
+P(z_i=k|\vec{w},\vec{z_{\neg i}})&\varpropto \frac{P(\vec{w},\vec{z})}{P(\vec{w},\vec{z_{\neg i}})}\\
+&=\frac{P(\vec{w}|\vec{z})P(\vec{z})}{P(\vec{w_{\neg i}}|\vec{z_{\neg i}})P(\vec{z_{\neg i}})P(\vec{w_{\neg i}})}\\
+&\varpropto \frac{P(\vec{w}|\vec{z})P(\vec{z})}{P(\vec{w_{\neg i}}|\vec{z_{\neg i}})P(\vec{z_{\neg i}})}\\
+&=\frac{\Delta(\vec{n_d}+\vec{\alpha})}{\Delta(\vec{n_{d,\neg i}}+\vec{\alpha})}\cdot\frac{\Delta(\vec{n_k}+\vec{\eta})}{\Delta(\vec{n_{k,\neg i}}+\vec{\eta})}\\
+=\frac{\Gamma(n_{d}^{(k)}+\alpha_k)\Gamma(\sum_{s=1}^Kn_{d,\neg i}^{(s)}+\alpha_s)}{\Gamma(n_{d,\neg i}^{(k)}+\alpha_k)\Gamma(\sum_{s=1}^Kn_{d}^{(s)}+\alpha_s)}&\cdot\frac{\Gamma(n_{k}^{(t)}+\eta_t)\Gamma(\sum_{v=1}^Vn_{d,\neg i}^{(v)}+\eta_v)}{\Gamma(n_{k,\neg i}^{(t)}+\eta_t)\Gamma(\sum_{v=1}^Vn_{d}^{(v)}+\eta_v)}\\
+&=\frac{n_{d,\neg i}^{(k)}+\alpha_k}{\sum_{s=1}^Kn_{d,\neg i}^{(s)}+\alpha_s}\cdot\frac{\Gamma(n_{k,\neg i}^{(t)}+\eta_t}{\sum_{v=1}^Vn_{d,\neg i}^{(v)}+\eta_v}\\
+&\varpropto \frac{\Gamma(n_{k,\neg i}^{(t)}+\eta_t}{\sum_{v=1}^Vn_{d,\neg i}^{(v)}+\eta_v}\cdot n_{d,\neg i}^{(k)}+\alpha_k\tag{9}
+\end{align}
+$$
+在推导的最后一步因为$\sum_{s=1}^Kn_{d,\neg i}^{(s)}+\alpha_s$与主题k无关因此可以消去简化计算。最终我们通过联合概率得到条件概率并可由此进行Gibbs sampling。
+
+#### 思路二
+
 我们最终需要采样的是文档的主题分布，因此由Gibbs 采样的特点条件概率为：
 $$
-P(z_i=k|\vec{w},\vec{z_{\neg i}})\tag{9}
+P(z_i=k|\vec{w},\vec{z_{\neg i}})\tag{10}
 $$
 注意此处的$i$是一个二维下标，$i=(d,n)$表示的是第$d$篇文档的第$n$个主题，$\neg i$表示排除$i$。
 
 因为$i$所对应的词是可以被观察到的，因此有如下关系
 $$
-P(z_i=k|\vec{w},\vec{z_{\neg i}})\varpropto P(z_i=k,w_i=t|\vec{w_{\neg i}},\vec{z_{\neg i}})\tag{10}
+P(z_i=k|\vec{w},\vec{z_{\neg i}})\varpropto P(z_i=k,w_i=t|\vec{w_{\neg i}},\vec{z_{\neg i}})\tag{11}
 $$
 由于$w_i,z_i$只涉及文档$d$和主题$k$这两个共轭结构与其他M+K-2个共轭结构无关因此排除$w_i,z_i$不会影响M+K个的共轭结构，只会影响向量上$i$所对应的计数，因此后验为：
 $$
 \begin{align}
-P(\vec{\theta_d}|\vec{z_{\neg i}},\vec{w_{\neg i}})=Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})\tag{11}\\
-P(\vec{\beta_k}|\vec{z_{\neg i}},\vec{w_{\neg i}})=Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})\tag{12}\\
+P(\vec{\theta_d}|\vec{z_{\neg i}},\vec{w_{\neg i}})=Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})\tag{12}\\
+P(\vec{\beta_k}|\vec{z_{\neg i}},\vec{w_{\neg i}})=Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})\tag{13}\\
 \end{align}
 $$
 由此可解条件概率：
@@ -121,19 +141,22 @@ $$
 &=\int P(z_i=k|\vec{\theta_d})P(\vec{\theta_d}|\vec{z_{\neg i}},\vec{w_{\neg i}})P(w_i=t|\vec{\beta_k})P(\vec{\beta_k}|\vec{z_{\neg i}},\vec{w_{\neg i}})d\vec{\theta_d}d\vec{\beta_k}\\
 &=\int P(z_i=k|\vec{\theta_d})Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})d\vec{\theta_d}\int P(w_i=t|\vec{\beta_k})Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})d\vec{\beta_k}\\
 &=\int \theta_{d,k}Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})d\vec{\theta_d}\int \beta_{k,t}Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})d\vec{\beta_k}\\
-&=E_{Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})}[\theta_{d,k}]\cdot E_{Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})}[\beta_{k,t}]\tag{13}
+&=E_{Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})}[\theta_{d,k}]\cdot E_{Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})}[\beta_{k,t}]\tag{14}
 \end{align}
 $$
 有Dirichlet分布的期望公式可得：
 $$
 \begin{align}
-E_{Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})}[\theta_{d,k}]=\frac{n_{d,\neg i}^{(k)}+{\alpha_k}}{\sum_{s=1}^Kn_{d,\neg i}^{(s)}+{\alpha_s}}\tag{14}\\
-E_{Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})}[\beta_{k,t}]=\frac{n_{k,\neg i}^{(t)}+{\eta_t}}{\sum_{v=1}^Vn_{t,\neg i}^{(v)}+{\eta_v}}\tag{15}\\
+E_{Dir(\vec{\theta_d}|\vec{n_{d,\neg i}}+\vec{\alpha})}[\theta_{d,k}]=\frac{n_{d,\neg i}^{(k)}+{\alpha_k}}{\sum_{s=1}^Kn_{d,\neg i}^{(s)}+{\alpha_s}}\tag{15}\\
+E_{Dir(\vec{\beta_k}|\vec{n_{k,\neg i}}+\vec{\eta})}[\beta_{k,t}]=\frac{n_{k,\neg i}^{(t)}+{\eta_t}}{\sum_{v=1}^Vn_{t,\neg i}^{(v)}+{\eta_v}}\tag{16}\\
 \end{align}
 $$
 因此条件概率为:
 $$
-P(z_i=k|\vec{w},\vec{z_{\neg i}})=\frac{n_{d,\neg i}^{(k)}+{\alpha_k}}{\sum_{s=1}^Kn_{d,\neg i}^{(s)}+{\alpha_s}}\cdot\frac{n_{k,\neg i}^{(t)}+{\eta_t}}{\sum_{v=1}^Vn_{t,\neg i}^{(v)}+{\eta_v}}\tag{16}
+\begin{align}
+P(z_i=k|\vec{w},\vec{z_{\neg i}})&\varpropto \frac{n_{d,\neg i}^{(k)}+{\alpha_k}}{\sum_{s=1}^Kn_{d,\neg i}^{(s)}+{\alpha_s}}\cdot\frac{n_{k,\neg i}^{(t)}+{\eta_t}}{\sum_{v=1}^Vn_{t,\neg i}^{(v)}+{\eta_v}}\\
+&\varpropto \, n_{d,\neg i}^{(k)}+{\alpha_k}\cdot\frac{n_{k,\neg i}^{(t)}+{\eta_t}}{\sum_{v=1}^Vn_{t,\neg i}^{(v)}+{\eta_v}}\tag{17}
+\end{align}
 $$
 
 ## LDA主题模型Gibbs 采样流程总结
@@ -162,5 +185,11 @@ $$
 ## 参考
 
 1. [CSDN-通俗理解LDA主题模型-v_JULY_v](https://blog.csdn.net/v_JULY_v/article/details/41209515)
+
 2. [博客园-文本主题模型之LDA(二) LDA求解之Gibbs采样算法-刘建平Pinard](https://www.cnblogs.com/pinard/p/6867828.html)
+
 3. [Latent Dirichlet Allocation-David M. Blei, Andrew Y. Ng, Michael I. Jordan](http://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf)
+
+4. [Finding scientific topics-Thomas L. Griffiths and Mark Steyvers](https://www.pnas.org/content/pnas/101/suppl_1/5228.full.pdf)
+
+   

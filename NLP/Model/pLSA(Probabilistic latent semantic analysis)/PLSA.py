@@ -35,9 +35,9 @@ class pLSA:
         self.N = len(self.word2id)
         # observed data
         self.X = np.zeros([self.M, self.N], np.int8)
-        for m in range(self.M):
-            for word in word_count_list[m]:
-                self.X[m, self.word2id[word]] = word_count_list[m][word]
+        for m, words in enumerate(word_count_list):
+            for word in words:
+                self.X[m, self.word2id[word]] = words[word]
         # p(z_k, d_i)
         self.doc_topic_matrix = np.random.random([self.M, self.K])
         # p(w_j, z_k)

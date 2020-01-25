@@ -4,7 +4,7 @@ import pyLDAvis.sklearn
 import numpy as np
 import pandas as pd
 from pprint import pprint
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 import os
 
@@ -13,14 +13,22 @@ class LdaApplication:
     def __init__(self, corpus, stopWords):
         self.corpus = corpus
         self.stopWords = stopWords
-        self.tfVectorizer = TfidfVectorizer(stop_words=self.stopWords, min_df=0.002, max_df=0.98, max_features=256)
+        self.tfVectorizer = TfidfVectorizer(stop_words=self.stopWords,
+                                            min_df=0.002,
+                                            max_df=0.98,
+                                            max_features=256)
         self.tfVector = self.tfVectorizer.fit_transform(self.corpus)
 
     def _get_tf_vector(self):
         tfVector = self.tfVector
         return tfVector
 
-    def train_model(self, n_components, learning_offset=10.0, learning_decay=0.7, max_doc_update_iter=100, n_jobs=-1):
+    def train_model(self,
+                    n_components,
+                    learning_offset=10.0,
+                    learning_decay=0.7,
+                    max_doc_update_iter=100,
+                    n_jobs=-1):
         '''
         训练LDA模型
         :param n_components: LDA的主题参数
@@ -30,14 +38,17 @@ class LdaApplication:
         :param n_jobs:
         :return: lda model
         '''
-        ldaModel = LatentDirichletAllocation(n_components=n_components,
-                                             learning_decay=learning_decay,
-                                             learning_offset=learning_offset,
-                                             max_doc_update_iter=max_doc_update_iter,
-                                             n_jobs=n_jobs)
+        ldaModel = LatentDirichletAllocation(
+            n_components=n_components,
+            learning_decay=learning_decay,
+            learning_offset=learning_offset,
+            max_doc_update_iter=max_doc_update_iter,
+            n_jobs=n_jobs)
         ldaModel.fit(self.tfVector)
-        print('The Log Likelihood Score:{}'.format(np.round(ldaModel.score(self._get_tf_vector()), 3)))
-        print('The Perplexity:{}'.format(np.round(ldaModel.perplexity(self._get_tf_vector()), 3)))
+        print('The Log Likelihood Score:{}'.format(
+            np.round(ldaModel.score(self._get_tf_vector()), 3)))
+        print('The Perplexity:{}'.format(
+            np.round(ldaModel.perplexity(self._get_tf_vector()), 3)))
         return ldaModel
 
     def grid_search_best_model(self, params):
@@ -51,8 +62,10 @@ class LdaApplication:
         gridSearchModel.fit(self._get_tf_vector())
         bestLdaModel = gridSearchModel.best_estimator_
         pprint('The bet model params:{}'.format(gridSearchModel.best_params_))
-        print('The best Log Likelihood Score:{}'.format(np.round(gridSearchModel.best_score_, 3)))
-        print('The Perplexity:{}'.format(np.round(bestLdaModel.perplexity(self._get_tf_vector()), 3)))
+        print('The best Log Likelihood Score:{}'.format(
+            np.round(gridSearchModel.best_score_, 3)))
+        print('The Perplexity:{}'.format(
+            np.round(bestLdaModel.perplexity(self._get_tf_vector()), 3)))
         return bestLdaModel
 
     def result_display(self, model):
@@ -67,10 +80,13 @@ class LdaApplication:
         ldaOutput = model.transform(self._get_tf_vector())
         topicNames = ["Topic" + str(i) for i in range(model.n_components)]
         docNames = ["Doc" + str(i) for i in range(len(self.corpus))]
-        dfDocumentTopic = pd.DataFrame(np.round(ldaOutput, 2), columns=topicNames, index=docNames)
+        dfDocumentTopic = pd.DataFrame(np.round(ldaOutput, 2),
+                                       columns=topicNames,
+                                       index=docNames)
         dominantTopic = np.argmax(dfDocumentTopic.values, axis=1)
         dfDocumentTopic['dominant_topic'] = dominantTopic
-        dfTopicDistribution = dfDocumentTopic['dominant_topic'].value_counts().reset_index(name="Num Documents")
+        dfTopicDistribution = dfDocumentTopic['dominant_topic'].value_counts(
+        ).reset_index(name="Num Documents")
         dfTopicDistribution.columns = ['Topic Num', 'Num Documents']
         return dfTopicDistribution
 
@@ -87,8 +103,12 @@ class LdaApplication:
             top_keyword_locs = (-topic_weights).argsort()[:n_words]
             topic_keywords.append(keywords.take(top_keyword_locs))
         df_topic_keywords = pd.DataFrame(topic_keywords)
-        df_topic_keywords.columns = ['Word ' + str(i) for i in range(df_topic_keywords.shape[1])]
-        df_topic_keywords.index = ['Topic ' + str(i) for i in range(df_topic_keywords.shape[0])]
+        df_topic_keywords.columns = [
+            'Word ' + str(i) for i in range(df_topic_keywords.shape[1])
+        ]
+        df_topic_keywords.index = [
+            'Topic ' + str(i) for i in range(df_topic_keywords.shape[0])
+        ]
         return df_topic_keywords
 
     def get_lda_vis(self, model, path='lda.html'):
@@ -97,7 +117,10 @@ class LdaApplication:
         :param path: Html 文件保存路径 默认 lda.html
         :param model: 需要可视化的LDA模型
         '''
-        panel = pyLDAvis.sklearn.prepare(lda_model=model, vectorizer=self.tfVectorizer, dtm=self.tfVector, mds='tsne')
+        panel = pyLDAvis.sklearn.prepare(lda_model=model,
+                                         vectorizer=self.tfVectorizer,
+                                         dtm=self.tfVector,
+                                         mds='tsne')
         # pyLDAvis.show(panel)
         pyLDAvis.save_html(panel, path)
 
